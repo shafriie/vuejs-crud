@@ -39,7 +39,9 @@
             }
         },
         created() {
-            axios.get('http://localhost:8000/api/v1/posts/'+this.$route.params.id).then(res => {
+            let url = 'http://localhost:8000/api/v1/posts/'+this.$route.params.id
+            let header = {headers: {Authorization: 'Bearer ' + localStorage.getItem('jwtToken')}}
+            axios.get(url, header).then(res => {
               // console.log(res.data.data)
               this.posts = res.data.data
             }).catch(err => {
@@ -48,7 +50,13 @@
         },
         methods: {
             PostStore() {
-                axios.put('http://localhost:8000/api/v1/posts/'+this.$route.params.id, this.posts).then(res => {
+                let url = 'http://localhost:8000/api/v1/posts/'+this.$route.params.id
+                
+                let header = {headers: {Authorization: 'Bearer ' + localStorage.getItem('jwtToken')}}
+                // alert(header)
+                // console.log(header)
+                // return
+                axios.put(url, this.posts, header).then(res => {
                     // console.log(res);
                     alert(res.data.message)
                     this.$router.push({

@@ -9,10 +9,10 @@
           <li class="nav-item">
             <a class="nav-link" href="#">Latihan CRUD Vue JS</a>
           </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="#">Link 2</a>
+          <li v-if="btnLogout" class="nav-item">
+            <a class="nav-link" @click.prevent="Logout" href="#">Logout</a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" href="#">Link 3</a>
           </li> -->
         </ul>
@@ -25,7 +25,25 @@
 
 <script>
 export default {
-
+  data(){
+    return{
+      btnLogout: false
+    }
+  },
+  created(){
+    if(localStorage.getItem('jwtToken')){
+      this.btnLogout = true
+    }
+  },
+  methods: {
+    Logout(){
+      localStorage.removeItem('jwtToken')
+      this.$router.push({
+        name: 'login'
+      })
+      this.btnLogout = false
+    }
+  }
 }
 </script>
 

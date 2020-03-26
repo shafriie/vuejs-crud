@@ -51,21 +51,29 @@
             }
         },
         created() {
-            axios.get('http://localhost:8000/api/v1/posts').then(response => {
-                this.posts = response.data.data
-            });
+            this.LoadAllData()
         },
         methods: {
             PostDelete(id) 
             {
                 if(confirm('Apakah anda ingin menghapus data ini?')){
-                    axios.delete('http://localhost:8000/api/v1/posts/'+id).then(response => {
-                        this.posts.splice(this.posts.indexOf(id), 1);
+                    const url = 'http://localhost:8000/api/v1/posts/'+id
+                    const header = {headers: {Authorization: 'Bearer ' + localStorage.getItem('jwtToken')}}
+                    axios.delete(url, header).then(response => {
+                        // this.posts.splice(this.posts.indexOf(id), 1);
+                        this.LoadAllData()
                         console.log(response)
                     }).catch(error => {
                         console.log(error.response)
                     });
                 }
+            },
+            LoadAllData(){
+                let url = 'http://localhost:8000/api/v1/posts'
+                const authBearer = 'Bearer ' + localStorage.getItem('jwtToken')
+                axios.get(url, {headers: { Authorization: authBearer }}).then(response => {
+                    this.posts = response.data.data
+                });
             }
         }
 

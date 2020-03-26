@@ -17,9 +17,15 @@ import 'bootstrap/dist/js/bootstrap.min'
 import PostsIndex from './components/posts/Index'
 import PostsCreate from './components/posts/Create'
 import PostsEdit from './components/posts/Edit'
+import Login from './components/auth/Login'
 
 const router = new VueRouter({
   routes: [
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
     {
       path: '/',
       name: 'posts',
@@ -37,6 +43,23 @@ const router = new VueRouter({
     }
   ],
   mode: 'history'
+})
+
+router.beforeEach((to, from, next) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = ['/login'];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem('jwtToken');
+
+  if (authRequired && !loggedIn) {
+    return next('/login');
+  }
+
+  // if (loggedIn) {
+  //   return next('/create');
+  // }
+
+  next();
 })
 
 Vue.config.productionTip = false

@@ -43,7 +43,9 @@
         },
         methods: {
             PostStore() {
-                axios.post('http://localhost:8000/api/v1/posts', this.posts).then(res => {
+                let url = 'http://localhost:8000/api/v1/posts'
+                let header = {headers: {Authorization: 'Bearer ' + localStorage.getItem('jwtToken')}}
+                axios.post(url, this.posts, header).then(res => {
                     // console.log(res);
                     alert(res.data.message)
                     this.$router.push({
